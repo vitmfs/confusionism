@@ -9,10 +9,8 @@
  */
 export function replaceVowels( word: string, charToReplaceVowels: string ): string {
 
-    return word.replace(/a|á|à|â|e|é|è|i|í|o|ó|ô|u|ú/gi, charToReplaceVowels);
+    return word.replace(/a|á|à|â|ã|e|é|è|ê|i|í|o|ó|ô|u|ú/gi, charToReplaceVowels);
 }
-// // console.log(replaceVowels("How are you doing?", "*"));
-// // console.log(replaceVowels("THIS IS A STATEMENT!", "*"));
 
 // PONTUACTION CHARACTERS AT THE END
 const pontuationCharacters:string = '.!?,';
@@ -21,15 +19,11 @@ export function pontuationCharacterAtTheEnd( text: string ):boolean {
         text[text.length-1]
     );
 }
-// console.log(pontuationCharacterAtTheEnd("depois"));
-// console.log(pontuationCharacterAtTheEnd("agora."));
 
 // PONTUACTION CHARACTERS AT THE START
 export function pontuationCharacterAtTheStart( text: string ): boolean {
     return pontuationCharacters.includes(text[0]);
 }
-// console.log(pontuationCharacterAtTheStart(".depois"));
-// console.log(pontuationCharacterAtTheStart("agora."));
 
 // REVERSE WORD
 export function reverseWord( wordToReverse: string ): string {
@@ -49,8 +43,6 @@ export function reverseAllWords(text: string): string {
     })
     return textWithAllReversedWords.trimEnd();
 }
-// console.log(reverseWord("depois"));
-// console.log(reverseWord("agora."));
 
 // SHUFFLE WORD
 export function shuffleWord( word: string ): string {
@@ -116,7 +108,7 @@ export function asciiLettersAndSpaceCharsOnly(stringToEncript: string): string {
     onlyAsciiLettersMessage =
         stringToEncript
         .replace(/á|à|â|ã/gi, 'a')
-        .replace(/é|è/gi, 'e')
+        .replace(/é|è|ê/gi, 'e')
         .replace(/í|ì/gi, 'i')
         .replace(/ó|ò|ô/gi, 'o')
         .replace(/ú/gi, 'u')
@@ -128,8 +120,6 @@ export function asciiLettersAndSpaceCharsOnly(stringToEncript: string): string {
 
     return onlyAsciiLettersMessage;
 }
-// console.log(asciiLettersAndSpaceCharsOnly("O João já foi a Paris."));
-// console.log(asciiLettersAndSpaceCharsOnly("O Leão entreteu a música."));
 
 // LETTER TO NATO ALPHABETH LETTER
 export function translateLetterToNATOAlphabet( letter: string ): string {
@@ -173,8 +163,6 @@ export function translateLetterToNATOAlphabet( letter: string ): string {
     }
     return "";
 }
-console.log(translateLetterToNATOAlphabet("a"));
-console.log(translateLetterToNATOAlphabet("Z"));
 
 // WORD TO NATO ALPHABETH
 export function translateLetterToNATOAlphabetFullText( originalText: string): string {
@@ -195,7 +183,6 @@ export function translateLetterToNATOAlphabetFullText( originalText: string): st
 
     return fullText;
 }
-// console.log("TESTE:\n" + translateLetterToNATOAlphabetFullText("TESTE"));
 
 export function asciiLettersWordToLetterPositionsInAlphabeth( word: string): string {
     const alphabeth = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -230,7 +217,6 @@ export function asciiLettersWordToLetterPositionsInAlphabethFullText( originalTe
 
     return simplefiedText ? fullText : "";
 }
-// console.log("TESTE:\n" + asciiLettersWordToLetterPositionsInAlphabethFullText("TESTE"));
 
 export function randomIntegerBetweenXandY(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) ) + min;
@@ -295,7 +281,6 @@ export function wordToWordPuzzleRow( asciiLettersWord: string, numberOfLettersIn
 
     return wordWithLettersBeforeAndAfter;
 }
-// console.log("TESTE: " + wordToWordPuzzleRow("TESTE", 10));
 
 export function textToWordPuzzle(originalText: string, numberOfPaddingLetters: number): string {
 
@@ -313,7 +298,6 @@ export function textToWordPuzzle(originalText: string, numberOfPaddingLetters: n
 
     return simplefiedText ? wordPuzzleFullText.toUpperCase() : "";
 }
-// console.log("TESTE:\N" + textToWordPuzzle("GOSTAVA DE JOGAR UM JOGO", 10));
 
 export const simplifiedPhraseIntoHiddenCharactersByLine2 = ( simplifiedString: string, numberOfCharsByLine: number): string => {
    
@@ -553,6 +537,101 @@ export function returnToDefaultVogals( word: string ) {
 
     return changedWord;
 }
+
+export function messageToPositiveWords(message: string): string {
+    const positiveWords = [
+        "Happiness",
+        "Joy",
+        "Delight",
+        "Bliss",
+        "Euphoria",
+        "Contentment",
+        "Satisfaction",
+        "Gratitude",
+        "Love",
+        "Excitement",
+        "Enthusiasm",
+        "Pleasure",
+        "Cheerfulness",
+        "Optimism",
+        "Hope",
+        "Confidence",
+        "Serenity",
+        "Tranquility",
+        "Peace",
+        "Harmony",
+        "Amusement",
+        "Laughter",
+        "Smiling",
+        "Goodwill",
+        "Kindness",
+        "Empathy",
+        "Compassion",
+        "Appreciation",
+        "Admiration",
+        "Respect",
+        "Wonder",
+        "Awe",
+        "Graciousness",
+        "Generosity",
+        "Patience",
+        "Tenderness",
+        "Affection",
+        "Warmth",
+        "Friendliness",
+        "Hospitality",
+        "Brave",
+        "Daring",
+        "Fabulous",
+        "Joyful",
+        "Kindness",
+        "Zealous",
+        "Quick",
+        "Unique",
+        "Excellent",
+        "Zeal",
+        "Digitalization",
+        
+    ];
+
+    const alphabeth = "abcdefghijklmnopqrstuvwxyz";
+    const lettersToWordsArrayWithThoseLetters = new Map();
+    alphabeth.split("").forEach( (letter) => {
+        const positiveWordsWithLetter: string[] = [];
+        positiveWords.forEach( (word) => {
+            if (word.includes(letter)) {
+                positiveWordsWithLetter.push(word);
+            }
+            lettersToWordsArrayWithThoseLetters.set(letter, positiveWordsWithLetter);
+        });
+    });
+
+    let strToReturn = "";
+    message.split("").forEach( (letter) => {
+        const lowerCasedLetter = letter.toLowerCase();
+        if (alphabeth.includes(lowerCasedLetter)) {
+            const wordArray = lettersToWordsArrayWithThoseLetters.get(lowerCasedLetter);
+            const randomWordFromWordArray = wordArray[randomIntegerBetweenXandY(0, wordArray.length - 1)];
+            const indexOfLetterInWordPlusOne = randomWordFromWordArray.indexOf(lowerCasedLetter) + 1;
+            if (indexOfLetterInWordPlusOne === 0) {
+                strToReturn += "\n";
+            } else if (indexOfLetterInWordPlusOne < 10) {
+                strToReturn += " " + indexOfLetterInWordPlusOne + "ª " + randomWordFromWordArray + "\n";
+            } else {
+                strToReturn += indexOfLetterInWordPlusOne + "ª " + randomWordFromWordArray + "\n";
+            }
+        } else {
+            strToReturn += "\n";
+        }
+        
+
+        // strToReturn += `${indexOfLetterInWordPlusOne < 10 ? (" " + indexOfLetterInWordPlusOne + "ª") : (indexOfLetterInWordPlusOne) + "ª"} ${randomWordFromWordArray}\n`;
+    })
+
+    return strToReturn
+}
+
+
 
 const reversed_certain_words = [
     "c1g2",

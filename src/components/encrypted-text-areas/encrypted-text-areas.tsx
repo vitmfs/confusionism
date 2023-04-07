@@ -5,7 +5,6 @@ import {
     asciiLettersAndSpaceCharsOnly,
     replaceVowels,
     lettersToNumbers,
-    reverseWord,
     translateLetterToNATOAlphabetFullText,
     asciiLettersWordToLetterPositionsInAlphabethFullText,
     textToWordPuzzle,
@@ -14,6 +13,9 @@ import {
     shuffledWordsText,
     aixToUfux,
     reverseAllWords,
+    initializeCellPhoneStr,
+    retroCellphoneEncription,
+    messageToPositiveWords,
 } from "../../functions/confusionism_module"
 // import QR from "qr-image";
 
@@ -29,6 +31,23 @@ export interface IEncryptedTextAreaProps {
 const EncryptedTextAreas: React.FC = () => {
 
     const [originalTextAreaValue, setOriginalTextAreaValue] = useState("");
+
+    const transformationFunctionsMap = new Map();
+    transformationFunctionsMap.set("lettersToNumbers", lettersToNumbers(originalTextAreaValue.toUpperCase()));
+    transformationFunctionsMap.set("vowelsToSymbol", replaceVowels(originalTextAreaValue, "*"));
+    transformationFunctionsMap.set("reverseAllWords", reverseAllWords(originalTextAreaValue));
+    transformationFunctionsMap.set("reversedText", originalTextAreaValue.split("").reverse().join(""));
+    transformationFunctionsMap.set("shuffledWords", shuffledWordsText(originalTextAreaValue));
+    transformationFunctionsMap.set("reversedWordByWord", originalTextAreaValue.split(/\s/gi).reverse().join(" "));
+    transformationFunctionsMap.set("letterPositionsInAlphabeth", asciiLettersWordToLetterPositionsInAlphabethFullText(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase()));
+    transformationFunctionsMap.set("aixToUfux",aixToUfux(originalTextAreaValue));
+    transformationFunctionsMap.set("natoAlphabeth",translateLetterToNATOAlphabetFullText(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase()));
+    transformationFunctionsMap.set("natoAlphabethUppercase",translateLetterToNATOAlphabetFullText(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase()).toUpperCase());
+    transformationFunctionsMap.set("textToWordPuzzle",textToWordPuzzle(originalTextAreaValue, 10));
+    transformationFunctionsMap.set("simplifiedPhraseIntoHiddenCharactersByLine2",simplifiedPhraseIntoHiddenCharactersByLine2(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase(), 10));
+    transformationFunctionsMap.set("simplifiedPhraseIntoHiddenCharactersByLineSimpler",simplifiedPhraseIntoHiddenCharactersByLineSimpler(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase(), 10));
+    // transformationFunctionsMap.set("messageToPositiveWords",messageToPositiveWords(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase()));
+    // transformationFunctionsMap.set("cellphoneString",retroCellphoneEncription(originalTextAreaValue));
     
     const handleOriginalTextAreaValueChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
         setOriginalTextAreaValue(event.currentTarget.value);
@@ -44,8 +63,6 @@ const EncryptedTextAreas: React.FC = () => {
     const [reverseAllWordsTextTAValue, setReverseAllWordsTextTAValue] = useState("");
 
 
-    let arr: string[] = []
-
     useEffect(() => {
         setLettersToNumbersTAValue(lettersToNumbers(originalTextAreaValue.toUpperCase()));
         setReplaceVowelsTAValue(replaceVowels(originalTextAreaValue, "*"));
@@ -56,11 +73,8 @@ const EncryptedTextAreas: React.FC = () => {
         setShuffledWordsTextTAValue(shuffledWordsText(originalTextAreaValue));
         setReverseAllWordsTextTAValue(reverseAllWords(originalTextAreaValue));
 
-        arr.push(lettersToNumbersTAValue);
-        arr.push(replaceVowelsTAValue);
-        arr.push(natoAlphabethTAValue);
-
     }, [originalTextAreaValue])
+
 
     const transformedTextAreasClickHandler = (event: React.FormEvent<HTMLTextAreaElement>) => {
         let textToCopyToClipboard = "";
@@ -82,35 +96,32 @@ const EncryptedTextAreas: React.FC = () => {
         overflow: "auto"
     };
 
-    // const [copiedAlertOpen, setCopiedAlertOpen] = useState(false);
     const [alertState, setAlertState] = useState<State>({
         open: false,
         vertical: 'bottom',
-        horizontal: 'center',
+        horizontal: 'right',
       });
 
     const opensAlert = () => {
-        // setCopiedAlertOpen(true);
         setAlertState({
             open: true,
             vertical: 'bottom',
-            horizontal: 'center',
+            horizontal: 'right',
         });
     };
 
     const closesAlert = () => {
-        // setCopiedAlertOpen(false);
         setAlertState({
             open: false,
             vertical: 'bottom',
-            horizontal: 'center',
+            horizontal: 'right',
         });
     };
 
 
     return (
         <Box sx={{ marginLeft: "2.4%" }}>
-            <Snackbar open={alertState.open} autoHideDuration={6000} onClose={closesAlert}>
+            <Snackbar open={alertState.open} autoHideDuration={2000} onClose={closesAlert}>
                 <Alert onClose={closesAlert} severity="success" sx={{ width: '100%' }}>
                 Message copied to clipboard! Paste it on the destination!
                 </Alert>
@@ -126,130 +137,20 @@ const EncryptedTextAreas: React.FC = () => {
                         onChange={(event: React.FormEvent<HTMLTextAreaElement>) => handleOriginalTextAreaValueChange(event)}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        value={lettersToNumbersTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        onClick={transformedTextAreasClickHandler}
-                        value={replaceVowelsTAValue}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto" }}
-                        value={reverseAllWordsTextTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        value={reversedTextTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        value={shuffledWordsTextTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto" }}
-                        value={reversedWordByWordTextTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        // onClick={(event: React.FormEvent<HTMLTextAreaElement>)=> alert(event.currentTarget.value)}
-                        value={letterPositionsInAlphabetTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        value={aixToUfux(originalTextAreaValue)}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        // onClick={(event: React.FormEvent<HTMLTextAreaElement>)=> alert(event.currentTarget.value)}
-                        value={natoAlphabethTAValue}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        // onClick={(event: React.FormEvent<HTMLTextAreaElement>)=> alert(event.currentTarget.value)}
-                        value={textToWordPuzzle(originalTextAreaValue, 10)}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        // onClick={(event: React.FormEvent<HTMLTextAreaElement>)=> alert(event.currentTarget.value)}
-                        value={simplifiedPhraseIntoHiddenCharactersByLine2(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase(), 10)}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <TextareaAutosize
-                        aria-label="minimum height"
-                        minRows={10}
-                        maxRows={30}
-                        style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
-                        value={simplifiedPhraseIntoHiddenCharactersByLineSimpler(asciiLettersAndSpaceCharsOnly(originalTextAreaValue).toUpperCase(), 10)}
-                        onClick={transformedTextAreasClickHandler}
-                    />
-                </Grid>
+                {Array.from(transformationFunctionsMap, ([key, transformationFunction]) => {
+                    return (
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={key}>
+                            <TextareaAutosize
+                                aria-label="minimum height"
+                                minRows={10}
+                                maxRows={30}
+                                style={{ width: "90%", margin: "0 auto", resize: "none", height: "160px", overflow: "auto" }}
+                                value={transformationFunction}
+                                onClick={transformedTextAreasClickHandler}
+                            />
+                        </Grid>
+                    );
+                })}
             </Grid>
         </Box>
     );
